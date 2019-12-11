@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - run: zip -r lambda.zip index.js package.json package-lock.json services node_modules
-      - uses: stcalica/update-lambda@v0.0.2
+      - uses: stcalica/update-lambda@master
         with:
           package: lambda.zip
           function-name: atlassian-marketplace-license-handler
