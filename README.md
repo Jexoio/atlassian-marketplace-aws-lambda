@@ -1,6 +1,12 @@
 # atlassian-marketplace-aws-lambda
 AWS Lambda function to pull license information from [Atlassian Marketplace](https://marketplace.atlassian.com) and send to ProfitWell.com &amp; UserList.io
 
+## Current Event Handlers
+ - New Trials
+ - New Transactions
+ - Cancelled & Expired Licenses
+ - Churned Paying Customers
+
 ## Requirements
 
  - AWS Lambda running Node.js 12.x 
