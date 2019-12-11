@@ -2,7 +2,7 @@ const request = require('request-promise-native');
 const { addNewPayWellTrial, addNewPayWellPayment, churnPayWellSubscription } = require('./services/ProfitWell');
 const { addNewUserListRecord, updateUserListRecord, registerUserListEvent } = require('./services/UserList');
 const { postEventDB, fetchEventDB } = require('./services/DynamoDB');
-const { sendErrorNotification } = require('./services/Slack');
+const { sendErrorNotification, sendNewTrialNotification, sendNewClientNotification, sendCancelledNotification, sendChurnedNotification } = require('./services/Slack');
 const { today, yesterday, twoDaysAgo, fiveDaysAgo, twoWeeksAgo, convertDate } = require('./services/Date');
 const MP_AUTH = "Basic " + Buffer.from(process.env.MP_AUTH_USER + ":" + process.env.MP_AUTH_PASS).toString("base64");
 const MP_PATH = "https://marketplace.atlassian.com/rest/2";
@@ -46,6 +46,10 @@ const checkNewTrials = async () => {
         key: dbRecordKey,
         value: convertDate(new Date())
       });
+      sendNewTrialNotification({
+        company: license.contactDetails.company,
+        app: license.addonName
+      });
     }
   }
 };
@@ -87,6 +91,12 @@ const checkTransactions = async () => {
         key: dbRecordKey,
         value: convertDate(new Date())
       });
+      if(transaction.purchaseDetails.saleType == 'New') {
+        sendNewClientNotification({
+          company: transaction.customerDetails.company,
+          app: transaction.addonName
+        });
+      }
     }
   }
 };
@@ -128,6 +138,11 @@ const checkExpiredAndCancelledTrials = async () => {
         key: dbRecordKey,
         value: convertDate(new Date())
       });
+      sendCancelledNotification({
+        company: license.contactDetails.company,
+        app: license.addonName,
+        status: license.status
+      });
     }
   }
 };
@@ -168,6 +183,10 @@ const checkChurnedLicenses = async () => {
       await postEventDB({
         key: dbRecordKey,
         value: convertDate(new Date())
+      });
+      sendChurnedNotification({
+        company: license.contactDetails.company,
+        app: license.addonName
       });
     }
   }
