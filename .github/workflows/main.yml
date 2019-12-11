@@ -1,0 +1,19 @@
+name: Upload Lambda Function
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  lambda:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - run: zip -r lambda.zip index.js package.json package-lock.json services node_modules
+      - uses: stcalica/update-lambda
+        with:
+          package: lambda.zip
+          function-name: atlassian-marketplace-license-handler
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          AWS_SECRET_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
