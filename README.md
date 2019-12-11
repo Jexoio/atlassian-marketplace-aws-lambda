@@ -1,5 +1,5 @@
 # atlassian-marketplace-aws-lambda
-AWS Lambda function to pull license information from [Atlassian Marketplace](https://marketplace.atlassian.com) and send to [ProfitWell.com](https://ProfitWell.com) &amp; [UserList.io](https://UserList.io)
+AWS Lambda function to pull license information from [Atlassian Marketplace](https://marketplace.atlassian.com) and send to [ProfitWell.com](https://ProfitWell.com) &amp; [UserList.com](https://UserList.com)
 
 ## Current Event Handlers
  - New Trials
@@ -13,7 +13,7 @@ AWS Lambda function to pull license information from [Atlassian Marketplace](htt
  - AWS DynamoDB table
  - Slack app
  - ProfitWell.com account
- - UserList.io account
+ - UserList.com account
  - GitHub Actions
 
 ## Setup
