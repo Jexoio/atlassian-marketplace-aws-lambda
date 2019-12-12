@@ -8,8 +8,7 @@ AWS Lambda function to pull license information from [Atlassian Marketplace](htt
  - Churned Paying Customers
 
 ## Requirements
-
- - AWS Lambda running Node.js 12.x 
+ - AWS Lambda running Node.js 12.x
  - AWS DynamoDB table
  - Slack app
  - ProfitWell.com account
@@ -26,20 +25,20 @@ AWS Lambda function to pull license information from [Atlassian Marketplace](htt
  - Set Environment Variables (see section bellow)
  - Clone the repo
  - Set GitHub Secrets to be used with GitHub Actions script for deployment (see section bellow)
- 
- ## AWS Lambda Environment Variables
+
+## AWS Lambda Environment Variables
  - AWS_DEPLOY_REGION  - AWS Region where the DynamoDB table is registered
  - EVENTS_TABLE - AWS DynamoDB table name
  - VENDOR_ID - Atlassian Marketplace Vendor ID
- - MP_AUTH_PASS - Atlassian Marketplace Basic Auth Password 
- - MP_AUTH_USER - Atlassian Marketplace Basic Auth User 
+ - MP_AUTH_PASS - Atlassian Marketplace Basic Auth Password
+ - MP_AUTH_USER - Atlassian Marketplace Basic Auth User
  - PROFITWELL_AUTH - ProfitWell API Token
  - SLACK_HOOK_PATH - Slack App Hook Path
  - USERLIST_AUTH - UserList API Token
 
 ## GitHub Secrets
-
  - AWS_REGION - AWS Region where the Lambda function is registered
+ - AWS_LAMBDA_FUNCTION_NAME - AWS Lambda function name
  - AWS_ACCESS_KEY_ID - AWS Access Key ID
  - AWS_SECRET_ACCESS_KEY - AWS Secret Key
 
