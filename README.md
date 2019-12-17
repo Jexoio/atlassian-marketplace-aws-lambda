@@ -1,6 +1,8 @@
 # atlassian-marketplace-aws-lambda
 AWS Lambda function to pull license information from [Atlassian Marketplace](https://marketplace.atlassian.com) and send to [ProfitWell.com](https://ProfitWell.com) &amp; [UserList.com](https://UserList.com)
 
+> NOTE: The function was built to service Cloud Subscriptions, hasn't been tested for Server and not play well due to differences in licensing states.
+
 ## Current Event Handlers
  - New Trials
  - New Transactions
