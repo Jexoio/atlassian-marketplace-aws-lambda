@@ -103,7 +103,7 @@ module.exports.sendCancelledNotification = async ({company, app, status}) => {
 };
 
 module.exports.sendChurnedNotification = async ({company, app}) => {
-  const text = `:sob: looks like ${company} cancelled their trial of ${app}.`
+  const text = `:sob: looks like ${company} cancelled their paid subscription for ${app}.`
   const json = {
     text
   };

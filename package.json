@@ -9,6 +9,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "analytics-node": "^3.4.0-beta.1",
     "lodash": "^4.17.15",
     "request": "^2.88.0",
     "request-promise": "^4.2.5",

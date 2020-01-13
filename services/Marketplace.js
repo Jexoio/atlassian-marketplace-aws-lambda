@@ -9,7 +9,7 @@ module.exports.getNewTrials = async () => {
   let licenses;
   try {
     const getLicenses = await request.get({
-        url: `${MP_PATH}/vendors/${VENDOR_ID}/reporting/licenses/export?accept=json&sortBy=startDate&order=asc&licenseType=evaluation&status=active&startDate=${fiveDaysAgo()}&endDate=${today()}&dateType=start`,
+        url: `${MP_PATH}/vendors/${VENDOR_ID}/reporting/licenses/export?accept=json&sortBy=startDate&order=asc&licenseType=evaluation&status=active&startDate=${fiveDaysAgo()}&endDate=${today()}&dateType=start&withAttribution=true`,
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',

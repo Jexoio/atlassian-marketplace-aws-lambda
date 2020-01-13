@@ -9,7 +9,8 @@ const {
   sendNewTrial,
   sendTransaction,
   sendExpiredAndCancelledTrial,
-  sendChurnedSubscription
+  sendChurnedSubscription,
+  sendMarketingAttribution
 } = require('./services/Destination');
 const { convertDate } = require('./services/Date');
 
@@ -30,6 +31,20 @@ const checkNewTrials = async () => {
         key: dbRecordKey,
         value: convertDate(new Date())
       });
+    }
+    if(license.attribution && license.attribution.channel) {
+      const dbMarketingAttributionRecordKey = `marketing_attribution-${license.addonLicenseId}`;
+      const isMarketingAttributionRegistered = await fetchEventDB({
+        key: dbMarketingAttributionRecordKey
+      });
+      if(!isMarketingAttributionRegistered || !isMarketingAttributionRegistered.Item) {
+        const wasSent = await sendMarketingAttribution(license);
+        if(!wasSent) return;
+        await postEventDB({
+          key: dbMarketingAttributionRecordKey,
+          value: convertDate(new Date())
+        });
+      }
     }
   }
 };
