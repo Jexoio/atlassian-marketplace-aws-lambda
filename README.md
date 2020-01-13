@@ -1,7 +1,9 @@
 # atlassian-marketplace-aws-lambda
-AWS Lambda function to pull license information from [Atlassian Marketplace](https://marketplace.atlassian.com) and send to [ProfitWell.com](https://ProfitWell.com) &amp; [UserList.com](https://UserList.com)
+AWS Lambda function to pull license information from [Atlassian Marketplace](https://marketplace.atlassian.com) and send to [ProfitWell.com](https://ProfitWell.com) &amp; [Segment.com](https://Segment.com)
 
 > NOTE: The function was built to service Cloud Subscriptions, hasn't been tested for Server and may not play well due to differences in licensing states.
+
+> NOTE 2: The current version of the script uses Segment service to handle profiles and events and ProfitWell service to handle revenue insights. Slack is used just for error notifications but there are ready-made functions to send notifications about license lifecycle if Segment is not used. There is also a UserList service that can beconnected but currently not in use in the example.
 
 ## Current Event Handlers
  - New Trials
@@ -13,9 +15,10 @@ AWS Lambda function to pull license information from [Atlassian Marketplace](htt
  - AWS Lambda running Node.js 12.x
  - AWS DynamoDB table
  - Slack app
- - ProfitWell.com account
- - UserList.com account
  - GitHub Actions
+ - Segment.com account (optional)
+ - ProfitWell.com account (optional)
+ - UserList.com account (optional)
 
 ## Setup
  - Create an AWS Lambda function
@@ -34,9 +37,10 @@ AWS Lambda function to pull license information from [Atlassian Marketplace](htt
  - VENDOR_ID - Atlassian Marketplace Vendor ID
  - MP_AUTH_PASS - Atlassian Marketplace Basic Auth Password
  - MP_AUTH_USER - Atlassian Marketplace Basic Auth User
- - PROFITWELL_AUTH - ProfitWell API Token
+ - PROFITWELL_AUTH - ProfitWell API Token (optional)
  - SLACK_HOOK_PATH - Slack App Hook Path
- - USERLIST_AUTH - UserList API Token
+ - USERLIST_AUTH - UserList API Token (optional)
+ - SEGMENT_WRITE_KEY - Segment Write Key (optional)
 
 ## GitHub Secrets
  - AWS_REGION - AWS Region where the Lambda function is registered
