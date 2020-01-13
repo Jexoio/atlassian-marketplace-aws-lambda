@@ -209,7 +209,7 @@ module.exports.registerEvent = async (eventName, {
   try {
     const response = await analytics.track({
       userId: hostLicenseId,
-      event: eventName,
+      event: segmentEvent,
       timestamp: occured_at,
       properties
     });
