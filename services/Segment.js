@@ -13,6 +13,7 @@ module.exports.addNewUser = async ({
   const {name, email} = contactDetails.technicalContact || contactDetails.billingContact;
   const {company, country} = contactDetails;
   const createdAt = new Date(maintenanceStartDate).toISOString();
+  const statusKey = 'status-'+addonKey;
   try {
     const response = await analytics.identify({
       userId: hostLicenseId,
@@ -25,6 +26,7 @@ module.exports.addNewUser = async ({
         company,
         country,
         createdAt,
+        [statusKey]: 'Trialling',
         [addonKey]: {
           addon_key: addonKey,
           addon_name: addonName,
@@ -77,6 +79,7 @@ module.exports.updateUser = async ({
   const contact = customerDetails || contactDetails;
   const {company, country} = contact;
   const {name, email} = contact.technicalContact || contact.billingContact;
+  const statusKey = 'status-'+addonKey;
   try {
     const response = await analytics.identify({
       userId: hostLicenseId,
@@ -88,6 +91,7 @@ module.exports.updateUser = async ({
         email,
         company,
         country,
+        [statusKey]: setStatus,
         [addonKey]: {
           addon_key: addonKey,
           addon_name: addonName,
