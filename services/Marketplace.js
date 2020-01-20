@@ -1,5 +1,5 @@
 const request = require('request-promise-native');
-const { today, fiveDaysAgo } = require('./Date');
+const { today, fiveDaysAgo, hasNotPassed } = require('./Date');
 const { sendErrorNotification } = require('./Slack');
 const MP_AUTH = "Basic " + Buffer.from(process.env.MP_AUTH_USER + ":" + process.env.MP_AUTH_PASS).toString("base64");
 const MP_PATH = "https://marketplace.atlassian.com/rest/2";
@@ -56,7 +56,9 @@ module.exports.getExpiredAndCancelledTrials = async () => {
           Authorization: MP_AUTH
         },
       });
-    licenses = JSON.parse(getLicenses);
+    licenses = JSON.parse(getLicenses).filter(license => {
+      return hasNotPassed(license.maintenanceEndDate)
+    });
   }
   catch(error) {
     console.error('ERROR: Cannot retrieve Marketplace Licenses!', error);
@@ -76,7 +78,9 @@ module.exports.getChurnedSubscriptions = async () => {
           Authorization: MP_AUTH
         },
       });
-    licenses = JSON.parse(getLicenses);
+    licenses = JSON.parse(getLicenses).filter(license => {
+      return hasNotPassed(license.maintenanceEndDate)
+    });
   }
   catch(error) {
     console.error('ERROR: Cannot retrieve Marketplace Licenses!', error);
