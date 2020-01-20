@@ -41,3 +41,8 @@ module.exports.twoWeeksAgo = () => {
   twoWeeksAgo.setHours(twoWeeksAgo.getHours() - 1);
   return module.exports.convertDate(twoWeeksAgo);
 };
+module.exports.hasNotPassed = (date) => {
+  const today = new Date();
+  const compareDate = new Date(date);
+  return compareDate >= today;
+};
