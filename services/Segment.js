@@ -15,7 +15,7 @@ module.exports.addNewUser = async ({
   const {company, country} = contactDetails;
   const createdAt = new Date(maintenanceStartDate).toISOString();
   const statusKey = 'status-'+addonKey;
-  const endDateKey = 'enDate-'+addonKey;
+  const endDateKey = 'endDate-'+addonKey;
   try {
     const response = await analytics.identify({
       userId: hostLicenseId,
