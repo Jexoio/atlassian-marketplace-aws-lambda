@@ -4,6 +4,7 @@ var analytics = new Analytics(process.env.SEGMENT_WRITE_KEY);
 
 module.exports.addNewUser = async ({
   maintenanceStartDate,
+  maintenanceEndDate,
   hostLicenseId,
   addonLicenseId,
   contactDetails,
@@ -14,6 +15,7 @@ module.exports.addNewUser = async ({
   const {company, country} = contactDetails;
   const createdAt = new Date(maintenanceStartDate).toISOString();
   const statusKey = 'status-'+addonKey;
+  const endDateKey = 'enDate-'+addonKey;
   try {
     const response = await analytics.identify({
       userId: hostLicenseId,
@@ -27,10 +29,12 @@ module.exports.addNewUser = async ({
         country,
         createdAt,
         [statusKey]: 'Trialling',
+        [endDateKey]: maintenanceEndDate,
         [addonKey]: {
           addon_key: addonKey,
           addon_name: addonName,
           addon_licenseId: addonLicenseId,
+          maintenanceEndDate,
           status: 'Trialling'
         }
       }
@@ -46,6 +50,7 @@ module.exports.addNewUser = async ({
 
 module.exports.updateUser = async ({
   purchaseDetails,
+  maintenanceEndDate,
   addonLicenseId,
   hostLicenseId,
   addonKey,
@@ -56,8 +61,10 @@ module.exports.updateUser = async ({
   licenseType
 }) => {
   let setStatus = 'Trialling';
+  let endDate = maintenanceEndDate;
   if(purchaseDetails) {
     setStatus = 'Paying';
+    endDate = purchaseDetails.maintenanceEndDate;
   }
   else if(status && licenseType) {
     if(status == 'inactive' && licenseType == 'EVALUATION') {
@@ -80,6 +87,7 @@ module.exports.updateUser = async ({
   const {company, country} = contact;
   const {name, email} = contact.technicalContact || contact.billingContact;
   const statusKey = 'status-'+addonKey;
+  const endDateKey = 'endDate-'+addonKey;
   try {
     const response = await analytics.identify({
       userId: hostLicenseId,
@@ -92,11 +100,13 @@ module.exports.updateUser = async ({
         company,
         country,
         [statusKey]: setStatus,
+        [endDateKey]: endDate,
         [addonKey]: {
           addon_key: addonKey,
           addon_name: addonName,
           addon_licenseId: addonLicenseId,
-          status: setStatus
+          status: setStatus,
+          maintenanceEndDate: endDate
         }
       }
     });
