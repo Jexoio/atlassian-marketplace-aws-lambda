@@ -54,7 +54,7 @@ const checkTransactions = async () => {
   for(let index of Object.keys(transactions)){
     const transaction = transactions[index];
     const eventName = 'subscription_paid';
-    const dbRecordKey = `${eventName}-${transaction.transactionId}`;
+    const dbRecordKey = `${eventName}-${transaction.addonLicenseId}-${transaction.transactionId}`;
     const isEventRegistered = await fetchEventDB({
       key: dbRecordKey
     });
