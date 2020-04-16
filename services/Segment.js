@@ -63,11 +63,9 @@ module.exports.updateUser = async ({
   licenseType
 }) => {
   let setStatus = 'Trialling';
-  let startDate = maintenanceStartDate;
   let endDate = maintenanceEndDate;
   if(purchaseDetails) {
     setStatus = 'Paying';
-    startDate = purchaseDetails.maintenanceStartDate;
     endDate = purchaseDetails.maintenanceEndDate;
   }
   else if(status && licenseType) {
@@ -92,31 +90,32 @@ module.exports.updateUser = async ({
   const {name, email} = contact.technicalContact || contact.billingContact;
   const statusKey = 'status-'+addonKey;
   const endDateKey = 'endDate-'+addonKey;
-  const createdAt = new Date(maintenanceStartDate).toISOString();
-  try {
-    const response = await analytics.identify({
-      userId: hostLicenseId,
-      location: {
-        country
-      },
-      traits: {
-        name,
-        email,
-        company,
-        country,
-        createdAt,
-        [statusKey]: setStatus,
-        [endDateKey]: endDate,
-        [addonKey]: {
-          addon_key: addonKey,
-          addon_name: addonName,
-          addon_licenseId: addonLicenseId,
-          status: setStatus,
-          maintenanceStartDate: startDate,
-          maintenanceEndDate: endDate
-        }
+  let args = {
+    userId: hostLicenseId,
+    location: {
+      country
+    },
+    traits: {
+      name,
+      email,
+      company,
+      country,
+      [statusKey]: setStatus,
+      [endDateKey]: endDate,
+      [addonKey]: {
+        addon_key: addonKey,
+        addon_name: addonName,
+        addon_licenseId: addonLicenseId,
+        status: setStatus,
+        maintenanceEndDate: endDate
       }
-    });
+    }
+  };
+  if(maintenanceStartDate) {
+    args.traits[addonKey].maintenanceStartDate = maintenanceStartDate;
+  }
+  try {
+    const response = await analytics.identify(args);
     return response;
   }
   catch(error) {
@@ -189,6 +188,7 @@ module.exports.addMarketingAttribution = async ({
 
 module.exports.registerEvent = async (eventName, {
   purchaseDetails,
+  maintenanceStartDate,
   addonLicenseId,
   hostLicenseId,
   addonKey,
@@ -225,6 +225,9 @@ module.exports.registerEvent = async (eventName, {
     if(properties.saleType == 'New') {
       segmentEvent = 'new_subscription_paid';
     }
+  }
+  if(eventName == 'trial_started') {
+    properties.startDate = maintenanceStartDate;
   }
 
   try {
