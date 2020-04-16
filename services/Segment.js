@@ -34,6 +34,7 @@ module.exports.addNewUser = async ({
           addon_key: addonKey,
           addon_name: addonName,
           addon_licenseId: addonLicenseId,
+          maintenanceStartDate,
           maintenanceEndDate,
           status: 'Trialling'
         }
@@ -50,6 +51,7 @@ module.exports.addNewUser = async ({
 
 module.exports.updateUser = async ({
   purchaseDetails,
+  maintenanceStartDate,
   maintenanceEndDate,
   addonLicenseId,
   hostLicenseId,
@@ -61,9 +63,11 @@ module.exports.updateUser = async ({
   licenseType
 }) => {
   let setStatus = 'Trialling';
+  let startDate = maintenanceStartDate;
   let endDate = maintenanceEndDate;
   if(purchaseDetails) {
     setStatus = 'Paying';
+    startDate = purchaseDetails.maintenanceStartDate;
     endDate = purchaseDetails.maintenanceEndDate;
   }
   else if(status && licenseType) {
@@ -88,6 +92,7 @@ module.exports.updateUser = async ({
   const {name, email} = contact.technicalContact || contact.billingContact;
   const statusKey = 'status-'+addonKey;
   const endDateKey = 'endDate-'+addonKey;
+  const createdAt = new Date(maintenanceStartDate).toISOString();
   try {
     const response = await analytics.identify({
       userId: hostLicenseId,
@@ -99,6 +104,7 @@ module.exports.updateUser = async ({
         email,
         company,
         country,
+        createdAt,
         [statusKey]: setStatus,
         [endDateKey]: endDate,
         [addonKey]: {
@@ -106,6 +112,7 @@ module.exports.updateUser = async ({
           addon_name: addonName,
           addon_licenseId: addonLicenseId,
           status: setStatus,
+          maintenanceStartDate: startDate,
           maintenanceEndDate: endDate
         }
       }

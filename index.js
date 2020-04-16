@@ -12,7 +12,7 @@ const {
   sendChurnedSubscription,
   sendMarketingAttribution
 } = require('./services/Destination');
-const { convertDate } = require('./services/Date');
+const { convertDate, greaterThan, twoWeeksAgo } = require('./services/Date');
 
 const checkNewTrials = async () => {
   const licenses = await getNewTrials();
@@ -20,7 +20,7 @@ const checkNewTrials = async () => {
   for(let index of Object.keys(licenses)){
     const license = licenses[index];
     const eventName = 'trial_started';
-    const dbRecordKey = `${eventName}-${license.addonLicenseId}-${license.lastUpdated}`;
+    const dbRecordKey = `${eventName}-${license.addonLicenseId}-${convertDate(license.lastUpdated)}`;
     const isEventRegistered = await fetchEventDB({
       key: dbRecordKey
     });
@@ -56,6 +56,7 @@ const checkTransactions = async () => {
     const eventName = 'subscription_paid';
 
     //start temporary fix
+    if(greaterThan(twoWeeksAgo(), transaction.purchaseDetails.maintenanceEndDate)) return;
     const dbRecordKeyLegacy = `${eventName}-${transaction.transactionId}`;
     const isEventRegisteredLegacy = await fetchEventDB({
       key: dbRecordKeyLegacy
@@ -83,7 +84,7 @@ const checkExpiredAndCancelledTrials = async () => {
   for(let index of Object.keys(licenses)){
     const license = licenses[index];
     const eventName = (license.status == 'cancelled')? 'trial_cancelled': 'trial_expired';
-    const dbRecordKey = `${eventName}-${license.addonLicenseId}-${license.lastUpdated}`;
+    const dbRecordKey = `${eventName}-${license.addonLicenseId}-${convertDate(license.lastUpdated)}`;
     const isEventRegistered = await fetchEventDB({
       key: dbRecordKey
     });
@@ -103,7 +104,7 @@ const checkChurnedSubscriptions = async () => {
   for(let index of Object.keys(licenses)){
     const license = licenses[index];
     const eventName = 'subscription_churned';
-    const dbRecordKey = `${eventName}-${license.addonLicenseId}-${license.lastUpdated}`;
+    const dbRecordKey = `${eventName}-${license.addonLicenseId}-${convertDate(license.lastUpdated)}`;
     const isEventRegistered = await fetchEventDB({
       key: dbRecordKey
     });
