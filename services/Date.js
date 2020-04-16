@@ -46,3 +46,9 @@ module.exports.hasNotPassed = (date) => {
   const compareDate = new Date(date);
   return compareDate >= today;
 };
+
+module.exports.greaterThan = (subjectDate, comparedDate) => {
+  const date = new Date(subjectDate);
+  const compareDate = new Date(comparedDate);
+  return date >= compareDate;
+};
