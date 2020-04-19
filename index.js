@@ -26,7 +26,7 @@ const checkNewTrials = async () => {
     });
     if(!isEventRegistered || !isEventRegistered.Item) {
       const wasSent = await sendNewTrial({license, eventName});
-      if(!wasSent) return;
+      if(!wasSent) continue;
       await postEventDB({
         key: dbRecordKey,
         value: convertDate(new Date())
@@ -39,7 +39,7 @@ const checkNewTrials = async () => {
       });
       if(!isMarketingAttributionRegistered || !isMarketingAttributionRegistered.Item) {
         const wasSent = await sendMarketingAttribution(license);
-        if(!wasSent) return;
+        if(!wasSent) continue;
         await postEventDB({
           key: dbMarketingAttributionRecordKey,
           value: convertDate(new Date())
@@ -56,12 +56,11 @@ const checkTransactions = async () => {
     const eventName = 'subscription_paid';
 
     //start temporary fix
-    if(greaterThan(twoWeeksAgo(), transaction.purchaseDetails.maintenanceEndDate)) return;
     const dbRecordKeyLegacy = `${eventName}-${transaction.transactionId}`;
     const isEventRegisteredLegacy = await fetchEventDB({
       key: dbRecordKeyLegacy
     });
-    if(isEventRegisteredLegacy.item) return;
+    if(isEventRegisteredLegacy.item) continue;
     //end temporary fix
     
     const dbRecordKey = `${eventName}-${transaction.addonLicenseId}-${transaction.transactionId}`;
@@ -70,7 +69,7 @@ const checkTransactions = async () => {
     });
     if(!isEventRegistered || !isEventRegistered.Item) {
       const wasSent = await sendTransaction({transaction, eventName});
-      if(!wasSent) return;
+      if(!wasSent) continue;
       await postEventDB({
         key: dbRecordKey,
         value: convertDate(new Date())
@@ -90,7 +89,7 @@ const checkExpiredAndCancelledTrials = async () => {
     });
     if(!isEventRegistered || !isEventRegistered.Item) {
       const wasSent = await sendExpiredAndCancelledTrial({license, eventName});
-      if(!wasSent) return;
+      if(!wasSent) continue;
       await postEventDB({
         key: dbRecordKey,
         value: convertDate(new Date())
@@ -110,7 +109,7 @@ const checkChurnedSubscriptions = async () => {
     });
     if(!isEventRegistered || !isEventRegistered.Item) {
       const wasSent = await sendChurnedSubscription({license, eventName});
-      if(!wasSent) return;
+      if(!wasSent) continue;
       await postEventDB({
         key: dbRecordKey,
         value: convertDate(new Date())
