@@ -1,3 +1,4 @@
+Moved to BitBucket [https://bitbucket.org/jexoio/atlassian-marketplace-aws-lambda/src/master/](https://bitbucket.org/jexoio/atlassian-marketplace-aws-lambda/src/master/)
 # atlassian-marketplace-aws-lambda
 AWS Lambda function to pull license information from [Atlassian Marketplace](https://marketplace.atlassian.com) and send to [ProfitWell.com](https://ProfitWell.com) &amp; [Segment.com](https://Segment.com)
 
