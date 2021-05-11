@@ -10,7 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "analytics-node": "^3.4.0-beta.1",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "request": "^2.88.0",
     "request-promise": "^4.2.5",
     "request-promise-native": "^1.0.8"
